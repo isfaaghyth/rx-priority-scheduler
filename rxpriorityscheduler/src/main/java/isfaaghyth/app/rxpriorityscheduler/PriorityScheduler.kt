@@ -55,6 +55,11 @@ class PriorityScheduler(val concurrency: Int) {
      */
     fun get(): PriorityScheduler = create()
 
+    /**
+     * Prioritize {@link io.reactivex.functions.Action  action}s with a numerical priority
+     * value. The higher the priority, the sooner it will run.
+     */
+    fun priority(priority: Int): Scheduler = InnerPriorityScheduler(priority, concurrency, queue)
 
     class InnerPriorityScheduler(
         private val priority: Int,
