@@ -56,6 +56,16 @@ class PriorityScheduler(val concurrency: Int) {
     fun get(): PriorityScheduler = create()
 
 
+    class InnerPriorityScheduler(
+        private val priority: Int,
+        private val queue: PriorityBlockingQueue<ComparableRunnable>): Scheduler() {
+
+        override fun createWorker(): Worker {
+            return PriorityWorker(queue, priority)
+        }
+
+    }
+
     class PriorityWorker(
         val queue: PriorityBlockingQueue<ComparableRunnable>,
         private val priority: Int
