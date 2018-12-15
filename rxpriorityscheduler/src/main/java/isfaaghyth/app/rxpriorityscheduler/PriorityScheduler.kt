@@ -56,6 +56,33 @@ class PriorityScheduler(val concurrency: Int) {
     fun get(): PriorityScheduler = create()
 
 
+    class PriorityWorker(
+        val queue: PriorityBlockingQueue<ComparableRunnable>,
+        private val priority: Int
+    ): Scheduler.Worker() {
+
+        private val compositeDisposable = CompositeDisposable()
+
+        override fun isDisposed(): Boolean = compositeDisposable.isDisposed
+
+        override fun schedule(run: Runnable): Disposable {
+            return schedule(run, 0, MILLISECONDS)
+        }
+
+        /**
+         * inspired by HandlerThreadScheduler.InnerHandlerThreadScheduler#schedule.
+         * @see <a href="https://github.com/ReactiveX/RxAndroid/blob/53bc70785b1c8f150c2be871a5b85979ad8b233a/src/main/java/rx/android/schedulers/HandlerThreadScheduler.java">InnerHandlerThreadScheduler</a>
+         */
+        override fun schedule(run: Runnable, delay: Long, unit: TimeUnit): Disposable {
+            val runnable = ComparableRunnable(run, priority)
+            val scheduledRunnable = ScheduledRunnable(runnable, compositeDisposable)
+            return scheduledRunnable
+        }
+
+        override fun dispose() = compositeDisposable.dispose()
+
+    }
+
     class ComparableRunnable(private val runnable: Runnable, private val priority: Int): Runnable, Comparable<ComparableRunnable> {
         override fun run() = runnable.run()
         override fun compareTo(other: ComparableRunnable): Int = other.priority - priority
