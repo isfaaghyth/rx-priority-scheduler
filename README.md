@@ -1,7 +1,7 @@
 # rx-priority-scheduler
 An RxJava scheduler that incorporates priorities in scheduling tasks
 
-While thinking about the intersection of RxJava and Android, I realized there was no default scheduler in the library that allowed for prioritizing actions before others, similar to how Volley's Request.Priority. I decided to try and work something together and this is what I initially came up with. Some of the threading seems a bit strange and the Worker works (no pun intended) a bit differently than others, but it seems to do the trick. Gladly accepting comments/pull requests!
+While thinking about the intersection of RxJava and Android, I realized there was no default scheduler in the library that allowed for prioritizing actions before others, similar to how [FAST](https://github.com/amitshekhariitbhu/Fast-Android-Networking)'s Priority. I decided to try and work something together and this is what I initially came up with. Some of the threading seems a bit strange and the Worker works (no pun intended) a bit differently than others, but it seems to do the trick. Gladly accepting comments/pull requests!
 
 ## Sample Usage
 
@@ -41,4 +41,4 @@ dependencies {
 ```
 
 
-this project is ported from [@ronshapiro](ronshapiro/rxjava-priority-scheduler)
+this project is ported from [@ronshapiro](https://github.com/ronshapiro/rxjava-priority-scheduler)
