@@ -61,5 +61,9 @@ dependencies {
 }
 ```
 
+### contributor
+- this project is ported from [@ronshapiro](https://github.com/ronshapiro/rxjava-priority-scheduler) (rxjava v.1)
+- kotlin with rxjava2 by. [@isfaaghyth](https://github.com/isfaaghyth)
 
-this project is ported from [@ronshapiro](https://github.com/ronshapiro/rxjava-priority-scheduler)
+
+MIT
