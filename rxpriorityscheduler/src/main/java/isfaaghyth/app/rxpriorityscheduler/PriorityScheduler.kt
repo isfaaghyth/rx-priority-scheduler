@@ -76,6 +76,16 @@ class PriorityScheduler(val concurrency: Int) {
         override fun schedule(run: Runnable, delay: Long, unit: TimeUnit): Disposable {
             val runnable = ComparableRunnable(run, priority)
             val scheduledRunnable = ScheduledRunnable(runnable, compositeDisposable)
+            scheduledRunnable.setFuture(object : Future<Any> {
+                override fun cancel(mayInterruptIfRunning: Boolean): Boolean = queue.remove(runnable)
+                override fun isCancelled(): Boolean = false
+                override fun isDone(): Boolean = false
+                override fun get(timeout: Long, unit: TimeUnit?): Any = Unit
+                override fun get(): Any = Unit
+
+            })
+            compositeDisposable.add(scheduledRunnable)
+            queue.offer(runnable, delay, unit)
             return scheduledRunnable
         }
 
