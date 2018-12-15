@@ -58,9 +58,29 @@ class PriorityScheduler(val concurrency: Int) {
 
     class InnerPriorityScheduler(
         private val priority: Int,
+        private val concurrency: Int,
         private val queue: PriorityBlockingQueue<ComparableRunnable>): Scheduler() {
 
+        private val workerCount = AtomicInteger()
+        private var executorService: ExecutorService = Executors.newFixedThreadPool(concurrency)
+
         override fun createWorker(): Worker {
+            synchronized(workerCount) {
+                if (workerCount.get() < concurrency) {
+                    workerCount.incrementAndGet()
+                    executorService.submit {
+                        while (true) {
+                            try {
+                                val runnable = queue.take()
+                                runnable.run()
+                            } catch (e: InterruptedException) {
+                                Thread.currentThread().interrupt()
+                                break
+                            }
+                        }
+                    }
+                }
+            }
             return PriorityWorker(queue, priority)
         }
 
