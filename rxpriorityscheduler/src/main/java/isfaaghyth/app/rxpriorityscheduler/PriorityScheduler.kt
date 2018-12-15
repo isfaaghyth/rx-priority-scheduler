@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
  * github: @isfaaghyth
  * ported: ronshapiro/rxjava-priority-scheduler (RxJava v.1)
  */
-class PriorityScheduler(val concurrency: Int) {
+class PriorityScheduler(private var concurrency: Int = 0) {
 
     private val queue = PriorityBlockingQueue<ComparableRunnable>()
 

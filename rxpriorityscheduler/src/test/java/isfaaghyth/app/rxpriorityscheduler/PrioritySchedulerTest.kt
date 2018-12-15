@@ -41,7 +41,7 @@ class PrioritySchedulerTest {
                 .subscribe { res ->
                     run {
                         synchronized(onNextLock) {
-                            loopLatch.await()
+                            await(loopLatch)
                             actual.add(res)
                             finishLatch.countDown()
                         }
@@ -61,6 +61,14 @@ class PrioritySchedulerTest {
                         " (value = $i). Full List: $actual")
             }
             last = i
+        }
+    }
+
+    fun await(latch: CountDownLatch) {
+        try {
+            latch.await()
+        } catch (e: InterruptedException) {
+            Thread.currentThread().interrupt()
         }
     }
 
