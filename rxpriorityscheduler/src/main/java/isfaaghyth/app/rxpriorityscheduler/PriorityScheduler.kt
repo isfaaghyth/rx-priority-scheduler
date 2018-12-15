@@ -48,7 +48,9 @@ class PriorityScheduler(val concurrency: Int) {
      * its action. It does however ensure that at the dequeue step, the thread will receive the
      * highest priority action available.
      */
-    fun withConcurrency(concurrency: Int): PriorityScheduler = PriorityScheduler(concurrency)
+    companion object {
+        fun withConcurrency(concurrency: Int): PriorityScheduler = PriorityScheduler(concurrency)
+    }
 
     /**
      * Getter
